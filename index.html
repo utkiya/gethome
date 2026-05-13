@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GetHome – Delivered in Minutes</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="logo" href="index.html">Get<span>Home</span></a>
+    <div class="nav-location">
+      <span class="pin">📍</span>
+      <span id="location-label">Select Location</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="nav-search">
+      <input type="text" id="global-search" placeholder='Search "milk", "chips", "shampoo"...' autocomplete="off" />
+      <span class="search-icon">🔍</span>
+      <div class="search-dropdown" id="search-dropdown"></div>
+    </div>
+    <div class="nav-actions">
+      <button class="cart-btn" onclick="openCart()">
+        🛒 Cart
+        <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- LOCATION MODAL -->
+<div class="modal-overlay" id="location-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeLocationModal()">✕</button>
+    <h2>📍 Set Delivery Location</h2>
+    <p>We'll show you products available at your address</p>
+    <input type="text" id="address-input" placeholder="Enter your full address…" />
+    <div class="quick-locations">
+      <button onclick="setLocation('Connaught Place, New Delhi')">Connaught Place</button>
+      <button onclick="setLocation('Lajpat Nagar, New Delhi')">Lajpat Nagar</button>
+      <button onclick="setLocation('Indiranagar, Bengaluru')">Indiranagar</button>
+      <button onclick="setLocation('Koramangala, Bengaluru')">Koramangala</button>
+      <button onclick="setLocation('Bandra West, Mumbai')">Bandra West</button>
+      <button onclick="setLocation('Sector 18, Noida')">Sector 18 Noida</button>
+    </div>
+    <button class="btn-primary" onclick="confirmLocation()">Confirm Location</button>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h3>🛒 Your Cart</h3>
+    <button onclick="closeCart()">✕</button>
+  </div>
+  <div class="delivery-badge">⚡ Delivery in <strong>10 minutes</strong></div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty" id="cart-empty">
+      <div class="empty-icon">🛍️</div>
+      <p>Your cart is empty</p>
+      <small>Add items to get started</small>
+    </div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none">
+    <div class="cart-summary">
+      <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+      <div class="summary-row"><span>Delivery Fee</span><span class="green">FREE</span></div>
+      <div class="summary-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+    </div>
+    <button class="btn-primary checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">⚡ 10-Minute Delivery</div>
+      <h1>Groceries &amp;<br/>Essentials,<br/><span>At Your Door</span></h1>
+      <p>Fresh produce, snacks, dairy, household items — delivered faster than you can say "out of stock".</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+        <button class="btn-secondary" onclick="openLocationModal()">📍 Set Location</button>
+      </div>
+      <div class="hero-stats">
+        <div><strong>50K+</strong><small>Happy Customers</small></div>
+        <div><strong>5000+</strong><small>Products</small></div>
+        <div><strong>10 min</strong><small>Avg. Delivery</small></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="float-badge top-left">🥛 Fresh Dairy</div>
+        <div class="float-badge top-right">🥦 Organic</div>
+        <div class="hero-emoji-grid">
+          <span>🍎</span><span>🥛</span><span>🧀</span>
+          <span>🥦</span><span>🍞</span><span>🥚</span>
+          <span>🍫</span><span>🧴</span><span>🌿</span>
+        </div>
+        <div class="float-badge bottom-center">🚀 Delivered in 10 mins</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFERS BANNER -->
+<section class="offers-strip">
+  <div class="offers-inner">
+    <div class="offer-card" style="--c:#fde68a">
+      <span class="offer-icon">🎁</span>
+      <div><strong>First Order FREE</strong><small>Use code GETHOME</small></div>
+    </div>
+    <div class="offer-card" style="--c:#bbf7d0">
+      <span class="offer-icon">🚚</span>
+      <div><strong>Free Delivery</strong><small>On orders above ₹199</small></div>
+    </div>
+    <div class="offer-card" style="--c:#bfdbfe">
+      <span class="offer-icon">⚡</span>
+      <div><strong>10 Min Delivery</strong><small>Guaranteed or refund</small></div>
+    </div>
+    <div class="offer-card" style="--c:#fecaca">
+      <span class="offer-icon">💸</span>
+      <div><strong>20% Cashback</strong><small>On UPI payments</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section" id="categories">
+  <div class="container">
+    <div class="section-header">
+      <h2>Shop by Category</h2>
+      <p>Everything you need, right here</p>
+    </div>
+    <div class="categories-grid" id="categories-grid"></div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section alt-bg" id="featured">
+  <div class="container">
+    <div class="section-header">
+      <h2>🔥 Best Sellers</h2>
+      <p>Most loved items this week</p>
+    </div>
+    <div class="products-grid" id="featured-grid"></div>
+  </div>
+</section>
+
+<!-- ALL PRODUCTS -->
+<section class="section" id="all-products">
+  <div class="container">
+    <div class="section-header">
+      <h2>All Products</h2>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-cat="all">All</button>
+        <button class="filter-btn" data-cat="fruits">🍎 Fruits</button>
+        <button class="filter-btn" data-cat="dairy">🥛 Dairy</button>
+        <button class="filter-btn" data-cat="snacks">🍿 Snacks</button>
+        <button class="filter-btn" data-cat="bakery">🍞 Bakery</button>
+        <button class="filter-btn" data-cat="beverages">☕ Beverages</button>
+        <button class="filter-btn" data-cat="household">🧴 Household</button>
+        <button class="filter-btn" data-cat="personal">🌿 Personal Care</button>
+      </div>
+    </div>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+</section>
+
+<!-- APP PROMO -->
+<section class="app-promo">
+  <div class="container">
+    <div class="promo-inner">
+      <div>
+        <h2>Download the GetHome App</h2>
+        <p>Get exclusive app-only deals, track your order live, and never miss a restock alert.</p>
+        <div class="store-buttons">
+          <button class="store-btn">🍎 App Store</button>
+          <button class="store-btn">▶️ Google Play</button>
+        </div>
+      </div>
+      <div class="promo-emojis">📱🛒⚡🏠</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Get<span>Home</span></div>
+        <p>Your neighbourhood store, online. Delivered in 10 minutes.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Blog</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-links">
+        <h4>Help</h4>
+        <a href="#">FAQ</a>
+        <a href="#">Contact</a>
+        <a href="#">Returns</a>
+        <a href="#">Track Order</a>
+      </div>
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Refund Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 GetHome. All rights reserved. Made with ❤️ in India.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal checkout-modal">
+    <button class="modal-close" onclick="closeCheckout()">✕</button>
+    <h2>✅ Confirm Order</h2>
+    <div class="checkout-address">
+      <label>Delivering to:</label>
+      <p id="checkout-address-text">—</p>
+    </div>
+    <div class="checkout-items" id="checkout-items"></div>
+    <div class="checkout-total">
+      <span>Total Amount</span>
+      <strong id="checkout-total-val">₹0</strong>
+    </div>
+    <div class="payment-options">
+      <label>Payment Method</label>
+      <div class="payment-grid">
+        <button class="pay-btn active" onclick="selectPayment(this,'UPI')">📱 UPI</button>
+        <button class="pay-btn" onclick="selectPayment(this,'Card')">💳 Card</button>
+        <button class="pay-btn" onclick="selectPayment(this,'COD')">💵 Cash</button>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="placeOrder()">Place Order 🎉</button>
+  </div>
+</div>
+
+<!-- ORDER SUCCESS MODAL -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal success-modal">
+    <div class="success-icon">🎉</div>
+    <h2>Order Placed!</h2>
+    <p>Your order is confirmed and will be delivered in <strong>10 minutes</strong>.</p>
+    <div class="order-id" id="order-id"></div>
+    <div class="delivery-tracker">
+      <div class="tracker-step done">✅ Order Confirmed</div>
+      <div class="tracker-step active">🏪 Being Packed</div>
+      <div class="tracker-step">🚴 Out for Delivery</div>
+      <div class="tracker-step">🏠 Delivered</div>
+    </div>
+    <button class="btn-primary" onclick="closeSuccess()">Continue Shopping</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
